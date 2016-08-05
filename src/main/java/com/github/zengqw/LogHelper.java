@@ -21,10 +21,16 @@ import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 @Intercepts({ @Signature(type = Executor.class, method = "update", args = {
 		MappedStatement.class, Object.class }) })
 public class LogHelper implements Interceptor {
+	
+    private boolean createTable = false;
+    //属性参数信息
+    private Properties properties;
 	// 需要记录日志的操作表
 	private static String[] TABLES = { "WorkcodeUser", "WorkcodeKey",
 			"WorkcodeRules", "Workcode","WorkcodeRetreat" };
@@ -47,6 +53,7 @@ public class LogHelper implements Interceptor {
 	
 	public Object intercept(Invocation invocation) throws Throwable {
 		try {
+			LogUtil.createTable(invocation);
 			Boolean notLog = NOT_LOG.get();
 			notLog = notLog == null ? false : notLog;
 			if (notLog) {// 不需要记录日志
@@ -222,7 +229,20 @@ public class LogHelper implements Interceptor {
 		}
 	}
 
-	public void setProperties(Properties properties) {
+	public void setProperties(Properties p) {
+		//默认是false 表示 只更新日志数据库表，不会破坏原有的日志数据
+		//如果为true 则会删除原有的日志表，再新建
+        createTable =Boolean.parseBoolean(p.getProperty("createTable"));
+        
+        this.properties=p;
+        LogUtil.setProperties(p);
+//        scanCRUD();
 	}
 
+	private void scanCRUD(){
+//		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");  
+		
+		
+	}
+	
 }
