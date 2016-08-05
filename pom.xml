@@ -8,7 +8,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>loghelper</name>
+    <name>LogHelper</name>
     <description>Mybatis LogHelper Plugin</description>
 
     <properties>
