@@ -53,7 +53,7 @@ public class LogHelper implements Interceptor {
 	
 	public Object intercept(Invocation invocation) throws Throwable {
 		try {
-			LogUtil.createTable(invocation);
+			new LogUtil(invocation).createTable();
 			Boolean notLog = NOT_LOG.get();
 			notLog = notLog == null ? false : notLog;
 			if (notLog) {// 不需要记录日志
@@ -230,10 +230,6 @@ public class LogHelper implements Interceptor {
 	}
 
 	public void setProperties(Properties p) {
-		//默认是false 表示 只更新日志数据库表，不会破坏原有的日志数据
-		//如果为true 则会删除原有的日志表，再新建
-        createTable =Boolean.parseBoolean(p.getProperty("createTable"));
-        
         this.properties=p;
         LogUtil.setProperties(p);
 //        scanCRUD();
