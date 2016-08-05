@@ -1,5 +1,6 @@
 package com.github.zengqw;
 
+import java.util.List;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -8,7 +9,7 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.Invocation;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class LogUtil {
+public class LogUtil extends Constants {
 
 	private static final ThreadLocal<LogBean> LOG_BEAN = new ThreadLocal<LogBean>();
 
@@ -32,7 +33,7 @@ public class LogUtil {
 			MappedStatement ms = (MappedStatement) invocation.getArgs()[0];
 	        DataSource dataSource = ms.getConfiguration().getEnvironment().getDataSource();
 	        JdbcTemplate  jdbcTemplate = new JdbcTemplate(dataSource);
-	        jdbcTemplate.execute("select * from workcode");
+	        List list =jdbcTemplate.queryForList("select * from SYSOBJECTS where name='"+LOG_TABLE_NAME+"' ");
 	        
 			NEED_CREATED=false;
 		}
