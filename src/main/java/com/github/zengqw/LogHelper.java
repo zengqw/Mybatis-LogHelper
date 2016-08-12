@@ -32,10 +32,8 @@ public class LogHelper implements Interceptor {
     //属性参数信息
     private Properties properties;
 	// 需要记录日志的操作表
-	private static String[] TABLES = { "WorkcodeUser", "WorkcodeKey",
-			"WorkcodeRules", "Workcode","WorkcodeRetreat" };
+	private String[] logTables;
 
-	private static final String INSERT_LOG_MAPPER_ID = "com.netease.workcode.mapper.WorkcodeLogMapper.insertSelective";
 	// 只属于 update 操作的 标识,强行不记录日志,默认false
 	private static final ThreadLocal<Boolean> NOT_LOG = new ThreadLocal<Boolean>();
 
@@ -232,7 +230,8 @@ public class LogHelper implements Interceptor {
 	public void setProperties(Properties p) {
         this.properties=p;
         LogUtil.setProperties(p);
-//        scanCRUD();
+        String tables = p.getProperty("tables");
+        logTables = tables.split(",");
 	}
 
 	private void scanCRUD(){
