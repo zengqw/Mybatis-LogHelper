@@ -60,6 +60,7 @@ public class LogUtil extends Constants {
 				MappedStatement ms = (MappedStatement) invocation.getArgs()[0];
 				Map<String, List<Object>> newTableMap = newTableMap(ms);
 				
+				
 				SQLUtil.createTable(ms, newTableMap);
 				System.out.println("");
 //				NEED_CREATED = false;
